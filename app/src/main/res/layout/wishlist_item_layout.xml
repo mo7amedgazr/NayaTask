@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.app.nayatechnotask.domain.entity.ListItem" />
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="currency"
+            type="String" />
+
+        <variable
+            name="clickListener"
+            type="com.app.nayatechnotask.presentation.wishlist.adapter.WishListAdapter.OnItemTap" />
+    </data>
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/startGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".03" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/endGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".97" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/topGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent=".03" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/bottomGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent=".97" />
+
+
+            <!--            <androidx.appcompat.widget.AppCompatImageView-->
+            <!--                android:id="@+id/ivWishlistIcon"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:onClick="@{() -> clickListener.onSave(item , position)}"-->
+            <!--                app:isWishlist="@{item.saved}"-->
+            <!--                app:layout_constraintEnd_toEndOf="@id/endGuideline"-->
+            <!--                app:layout_constraintTop_toTopOf="@id/topGuideline"-->
+            <!--                app:srcCompat="@mipmap/save" />-->
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivItemImg"
+                android:layout_width="120dp"
+                android:layout_height="150dp"
+                app:imageUrl="@{item.image}"
+                app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toTopOf="@id/topGuideline" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvItemName"
+                style="@style/Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLines="1"
+                android:text="@{item.name}"
+                app:layout_constraintStart_toEndOf="@id/ivItemImg"
+                app:layout_constraintTop_toTopOf="@id/topGuideline"
+                tools:text="SAINT LAURENT" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvItemDesc"
+                style="@style/Description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{item.brand}"
+                app:layout_constraintStart_toStartOf="@id/tvItemName"
+                app:layout_constraintTop_toBottomOf="@id/tvItemName"
+                tools:text="SAINT LAURENT BAG VERY GOOD QUALITY" />
+
+            <LinearLayout
+                android:id="@+id/llPriceLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="@id/tvItemName"
+                app:layout_constraintTop_toBottomOf="@id/tvItemDesc">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPrice"
+                    style="@style/Description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{item.price.toString()}"
+                    tools:text="2300" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPriceCurrency"
+                    style="@style/Description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="@{currency}"
+                    tools:text="AED" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvDiscountPrice"
+                    style="@style/Description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:visibility="gone"
+                    app:currency="@{currency}"
+                    app:listItem="@{item}"
+                    tools:text="2300" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llRemoveItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:gravity="center_vertical"
+                android:onClick="@{() -> clickListener.onSave(item , position)}"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"
+                app:layout_constraintStart_toStartOf="@id/tvItemName"
+                app:layout_constraintTop_toBottomOf="@id/llPriceLayout">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_delete" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/remove" />
+
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

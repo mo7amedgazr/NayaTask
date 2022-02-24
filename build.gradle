@@ -1,0 +1,36 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+
+    // dagger hilt
+    ext.dagger_hilt_version = "2.37"
+    ext.dagger_hilt_viewmodel_version = "1.0.0-alpha03"
+    ext.jacoco_version = "0.8.1"
+
+    ext.dagger_version = '2.38.1'
+
+
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+
+        jcenter()
+
+
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:7.0.4"
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$dagger_hilt_version"
+
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.4.0"
+
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
