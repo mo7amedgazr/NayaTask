@@ -1,6 +1,7 @@
 package com.app.nayatechnotask.data.repository
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -31,12 +32,14 @@ class ListItemsRepositoryImpl @Inject constructor(
                 context.datastore.edit {
                     item.id?.let { itemId ->
                         if (it.contains(booleanPreferencesKey(itemId))) {
+                            Log.d("listItems", "item saved")
                             item.saved = true
                         }
                     }
 
                 }
             }
+            Log.d("listItems", "emit")
             emit(DataState.Success(response))
         }
 

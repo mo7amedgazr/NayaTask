@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.nayatechnotask.data.common.response.ItemsListResponse
 import com.app.nayatechnotask.data.common.utils.DataState
+import com.app.nayatechnotask.domain.entity.ListItem
 import com.app.nayatechnotask.domain.usecase.ListItemsUseCase
 import com.app.nayatechnotask.domain.usecase.SaveItemUseCase
 import com.app.nayatechnotask.presentation.base.BaseViewModel
@@ -21,14 +22,12 @@ class HomeViewModel @Inject constructor(
     private val saveItemUseCase: SaveItemUseCase
 ) : BaseViewModel() {
 
-    private val Context.dataStore by preferencesDataStore(
-        name = "wishlist"
-    )
-
     private var _listItemsResponse: MutableLiveData<ItemsListResponse> =
         MutableLiveData()
     val listItemsResponse: LiveData<ItemsListResponse> get() = _listItemsResponse
 
+    private var _wishListItems: MutableLiveData<List<ListItem>> = MutableLiveData()
+    val wishListItems: LiveData<List<ListItem>> = _wishListItems
 
     fun getItemsList() = viewModelScope.launch {
         showLoading.value = true
@@ -43,18 +42,32 @@ class HomeViewModel @Inject constructor(
                 is DataState.Success -> {
                     response.value?.let { response ->
                         _listItemsResponse.value = response
+
+                        response.items?.let { list ->
+                            val savedList = list.filter { it.saved }
+                            _wishListItems.value = savedList
+                        }
                     }
                 }
             }
         }
     }
 
-    fun saveItem(id: String) = viewModelScope.launch {
-        saveItemUseCase.saveItem(id)
+    fun saveItem(listItem: ListItem) = viewModelScope.launch {
+        listItem.id?.let { saveItemUseCase.saveItem(it) }
+        val currentList = _wishListItems.value as MutableList
+        currentList.add(listItem)
+
+        _wishListItems.value = currentList
     }
 
-    fun removeItem(id: String) = viewModelScope.launch {
-        saveItemUseCase.removeItem(id)
+    fun removeItem(listItem: ListItem) = viewModelScope.launch {
+        listItem.id?.let { saveItemUseCase.removeItem(it) }
+
+        val currentList = _wishListItems.value as MutableList
+        currentList.remove(listItem)
+
+        _wishListItems.value = currentList
     }
 
 }

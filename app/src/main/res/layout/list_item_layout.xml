@@ -62,12 +62,12 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent=".97" />
 
-
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivWishlistIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> clickListener.onSave(item , position)}"
+                android:padding="10dp"
                 app:isWishlist="@{item.saved}"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintTop_toTopOf="@id/topGuideline"

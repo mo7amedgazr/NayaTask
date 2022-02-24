@@ -1,6 +1,7 @@
 package com.app.nayatechnotask.presentation.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import com.app.nayatechnotask.R
 import com.app.nayatechnotask.databinding.FragmentHomeBinding
 import com.app.nayatechnotask.domain.entity.ListItem
 import com.app.nayatechnotask.presentation.home.adapter.ItemsListAdapter
-import com.app.nayatechnotask.presentation.wishlist.adapter.WishListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -31,6 +31,9 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+
+    private var viewInitialized = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,6 +49,7 @@ class HomeFragment : Fragment() {
         initRV()
         initViewModel()
         initClickListener()
+
     }
 
     private fun initClickListener() {
@@ -57,9 +61,18 @@ class HomeFragment : Fragment() {
     private fun initViewModel() {
         mViewModel.listItemsResponse.observe(viewLifecycleOwner) {
             it.currency?.let { cr -> mAdapter.setCurrency(cr) }
-            it.items?.let { list -> itemsList.addAll(list) }
+            it.items?.let { list ->
+                itemsList.clear()
+                itemsList.addAll(list)
+            }
             mAdapter.submitList(itemsList)
+            mAdapter.notifyDataSetChanged()
         }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         mViewModel.getItemsList()
     }
@@ -71,15 +84,15 @@ class HomeFragment : Fragment() {
         mAdapter.setItemTapListener(object : ItemsListAdapter.OnItemTap {
             override fun onSave(listItem: ListItem, position: Int) {
                 if (listItem.saved) {
-                    listItem.id?.let { mViewModel.removeItem(it) }
+                    listItem.id?.let { mViewModel.removeItem(listItem) }
                     listItem.saved = false
                 } else {
-                    listItem.id?.let { mViewModel.saveItem(it) }
+                    listItem.id?.let { mViewModel.saveItem(listItem) }
                     listItem.saved = true
                 }
                 itemsList[position] = listItem
-                mAdapter.submitList(null)
                 mAdapter.submitList(itemsList)
+                mAdapter.notifyDataSetChanged()
             }
         })
     }

@@ -39,13 +39,13 @@ class ItemsListAdapter :
             oldItem: ListItem,
             newItem: ListItem
         ): Boolean =
-            oldItem === newItem
+            oldItem == newItem
 
         override fun areContentsTheSame(
             oldItem: ListItem,
             newItem: ListItem
         ): Boolean =
-            oldItem == newItem
+            oldItem.id == newItem.id
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {

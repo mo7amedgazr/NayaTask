@@ -61,27 +61,23 @@ class WishlistFragment : Fragment() {
 
         mAdapter.setItemTapListener(object : WishListAdapter.OnItemTap {
             override fun onSave(listItem: ListItem, position: Int) {
-                if (listItem.saved) {
-                    listItem.id?.let { mViewModel.removeItem(it) }
-                    listItem.saved = false
-                } else {
-                    listItem.id?.let { mViewModel.saveItem(it) }
-                    listItem.saved = true
-                }
-                itemsList[position] = listItem
-                mAdapter.submitList(null)
-                mAdapter.submitList(itemsList)
+                mViewModel.removeItem(listItem)
             }
         })
     }
 
     private fun initViewModel() {
-        mViewModel.listItemsResponse.observe(viewLifecycleOwner) {
-            val allItems = it.items
-            allItems?.filter { it.saved }?.let { savedList -> itemsList.addAll(savedList) }
+        mViewModel.listItemsResponse.observe(viewLifecycleOwner) { response ->
+            response.currency?.let {
+                mAdapter.setCurrency(it)
+            }
+        }
 
-            // fire the adapter
+        mViewModel.wishListItems.observe(viewLifecycleOwner) { list ->
+            itemsList.clear()
+            itemsList.addAll(list)
             mAdapter.submitList(itemsList)
+            mAdapter.notifyDataSetChanged()
         }
     }
 
